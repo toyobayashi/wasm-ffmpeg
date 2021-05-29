@@ -6,6 +6,7 @@ module.exports = function (_options, { isDebug }) {
 
   const commonFlags = [
     '--bind',
+    // '-sINITIAL_MEMORY=33554432',
     '-sALLOW_MEMORY_GROWTH=1',
     ...(isDebug ? debugFlags : [])
   ]
@@ -25,7 +26,9 @@ module.exports = function (_options, { isDebug }) {
           './deps/ffmpeg/lib/libavcodec.a',
           './deps/ffmpeg/lib/libavformat.a',
           './deps/ffmpeg/lib/libavutil.a',
-          './deps/ffmpeg/lib/libswresample.a'
+          './deps/ffmpeg/lib/libswresample.a'/* ,
+          './deps/ffmpeg/lib/libavfilter.a',
+          './deps/ffmpeg/lib/libswscale.a' */
         ],
         wrapScript: '',
         compileOptions: [...commonFlags],
