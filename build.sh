@@ -22,3 +22,5 @@ emconfigure ./configure --disable-programs \
 
 emmake make
 emmake make install
+cp -rpf ./.local ../dist
+cd ..

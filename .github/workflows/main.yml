@@ -29,6 +29,6 @@ jobs:
       with:
         name: ffmpeg
         path: |
-          .local/
+          dist/
         if-no-files-found: ignore # 'warn' or 'ignore' are also available, defaults to `warn`
         retention-days: 1
