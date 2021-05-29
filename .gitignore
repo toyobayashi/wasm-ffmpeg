@@ -1,6 +1,5 @@
 CMakeLists.txt
 node_modules
 .cgenbuild
-deps
 /test/*.wav
 /test/*.aac
