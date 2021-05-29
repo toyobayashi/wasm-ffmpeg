@@ -35,6 +35,8 @@
 #include <libavutil/opt.h>
 #include <libavutil/pixdesc.h>
 
+#include "config.h"
+
 static AVFormatContext *ifmt_ctx;
 static AVFormatContext *ofmt_ctx;
 typedef struct FilteringContext {
@@ -186,10 +188,11 @@ static int open_output_file(const char *filename)
                 }
 
                 enc_ctx->sample_rate = dec_ctx->sample_rate;
-                enc_ctx->channel_layout = dec_ctx->channel_layout;
-                enc_ctx->channels = av_get_channel_layout_nb_channels(enc_ctx->channel_layout);
+                enc_ctx->channel_layout = av_get_default_channel_layout(OUTPUT_CHANNELS); // dec_ctx->channel_layout;
+                enc_ctx->channels = OUTPUT_CHANNELS; // av_get_channel_layout_nb_channels(enc_ctx->channel_layout);
                 /* take first format from list of supported formats */
                 enc_ctx->sample_fmt = encoder->sample_fmts[0];
+                enc_ctx->bit_rate = OUTPUT_BIT_RATE;
                 enc_ctx->time_base = (AVRational){1, enc_ctx->sample_rate};
             }
 
@@ -439,7 +442,7 @@ static int encode_write_frame(unsigned int stream_index, int flush)
     AVPacket *enc_pkt = filter->enc_pkt;
     int ret;
 
-    av_log(NULL, AV_LOG_INFO, "Encoding frame\n");
+    // av_log(NULL, AV_LOG_INFO, "Encoding frame\n");
     /* encode filtered frame */
     av_packet_unref(enc_pkt);
 
@@ -473,7 +476,7 @@ static int filter_encode_write_frame(AVFrame *frame, unsigned int stream_index)
     FilteringContext *filter = &filter_ctx[stream_index];
     int ret;
 
-    av_log(NULL, AV_LOG_INFO, "Pushing decoded frame to filters\n");
+    // av_log(NULL, AV_LOG_INFO, "Pushing decoded frame to filters\n");
     /* push the decoded frame into the filtergraph */
     ret = av_buffersrc_add_frame_flags(filter->buffersrc_ctx,
             frame, 0);
@@ -484,7 +487,7 @@ static int filter_encode_write_frame(AVFrame *frame, unsigned int stream_index)
 
     /* pull filtered frames from the filtergraph */
     while (1) {
-        av_log(NULL, AV_LOG_INFO, "Pulling filtered frame from filters\n");
+        // av_log(NULL, AV_LOG_INFO, "Pulling filtered frame from filters\n");
         ret = av_buffersink_get_frame(filter->buffersink_ctx,
                                       filter->filtered_frame);
         if (ret < 0) {
@@ -513,7 +516,7 @@ static int flush_encoder(unsigned int stream_index)
                 AV_CODEC_CAP_DELAY))
         return 0;
 
-    av_log(NULL, AV_LOG_INFO, "Flushing stream #%u encoder\n", stream_index);
+    // av_log(NULL, AV_LOG_INFO, "Flushing stream #%u encoder\n", stream_index);
     return encode_write_frame(stream_index, 1);
 }
 

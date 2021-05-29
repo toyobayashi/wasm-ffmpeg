@@ -43,10 +43,7 @@
 
 #include "libswresample/swresample.h"
 
-/* The output bit rate in bit/s */
-#define OUTPUT_BIT_RATE 163840
-/* The number of output channels */
-#define OUTPUT_CHANNELS 2
+#include "config.h"
 
 /**
  * Open an input file and the required decoder.

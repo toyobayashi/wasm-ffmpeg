@@ -28,7 +28,8 @@ module.exports = function (_options, { isDebug }) {
           'avutil',
           'swresample',
           'avfilter',
-          'swscale'
+          'swscale',
+          'mp3lame'
         ],
         wrapScript: '',
         compileOptions: [...commonFlags],

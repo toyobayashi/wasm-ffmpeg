@@ -3,3 +3,4 @@ node_modules
 .cgenbuild
 /test/*.wav
 /test/*.aac
+/test/*.mp3
