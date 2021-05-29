@@ -6,7 +6,7 @@ module.exports = function (_options, { isDebug }) {
 
   const commonFlags = [
     '--bind',
-    // '-sINITIAL_MEMORY=33554432',
+    '-sINITIAL_MEMORY=33554432',
     '-sALLOW_MEMORY_GROWTH=1',
     ...(isDebug ? debugFlags : [])
   ]
@@ -19,16 +19,16 @@ module.exports = function (_options, { isDebug }) {
         type: 'exe',
         sources: [
           './src/transcode_aac.c',
+          './src/transcoding.c',
           './src/binding.cpp'
         ],
-        includePaths: ['./deps/ffmpeg/include'],
-        libs: [
-          './deps/ffmpeg/lib/libavcodec.a',
-          './deps/ffmpeg/lib/libavformat.a',
-          './deps/ffmpeg/lib/libavutil.a',
-          './deps/ffmpeg/lib/libswresample.a'/* ,
-          './deps/ffmpeg/lib/libavfilter.a',
-          './deps/ffmpeg/lib/libswscale.a' */
+        libs: [ // $EMSDK/upstream/emscripten/system/local/lib
+          'avcodec',
+          'avformat',
+          'avutil',
+          'swresample',
+          'avfilter',
+          'swscale'
         ],
         wrapScript: '',
         compileOptions: [...commonFlags],

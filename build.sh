@@ -18,9 +18,11 @@ emconfigure ./configure --disable-programs \
   --cc=emcc \
   --cxx=em++ \
   --ar=emar \
+  --ranlib=emranlib \
   --prefix=./.local
 
 emmake make
 emmake make install
 cp -rpf ./.local ../dist
+cp -rpf ./.local/* "$EMSDK/upstream/emscripten/system/local"
 cd ..
