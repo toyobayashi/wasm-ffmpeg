@@ -8,7 +8,7 @@ emconfigure ./configure --enable-shared=no --enable-nasm=no --prefix="$localpref
 emmake make
 emmake make install
 cd ../..
-cp -rpf "$localprefix/*" "$EMSDK/upstream/emscripten/system/local"
+cp -rpf ./.local/* "$EMSDK/upstream/emscripten/system/local"
 
 tag="n4.4"
 curl -O -L "https://github.com/FFmpeg/FFmpeg/archive/refs/tags/$tag.tar.gz"
@@ -35,5 +35,5 @@ emconfigure ./configure --disable-programs \
 emmake make
 emmake make install
 cp -rpf "$localprefix" ../dist
-cp -rpf "$localprefix/*" "$EMSDK/upstream/emscripten/system/local"
 cd ..
+cp -rpf ./.local/* "$EMSDK/upstream/emscripten/system/local"
