@@ -119,7 +119,7 @@ static int open_input_file(const char *filename)
     return 0;
 }
 
-static int open_output_file(const char *filename)
+static int open_output_file(const char *filename, int64_t bit_rate)
 {
     AVStream *out_stream;
     AVStream *in_stream;
@@ -192,7 +192,7 @@ static int open_output_file(const char *filename)
                 enc_ctx->channels = OUTPUT_CHANNELS; // av_get_channel_layout_nb_channels(enc_ctx->channel_layout);
                 /* take first format from list of supported formats */
                 enc_ctx->sample_fmt = encoder->sample_fmts[0];
-                enc_ctx->bit_rate = OUTPUT_BIT_RATE;
+                enc_ctx->bit_rate = bit_rate;
                 enc_ctx->time_base = (AVRational){1, enc_ctx->sample_rate};
             }
 
@@ -520,7 +520,7 @@ static int flush_encoder(unsigned int stream_index)
     return encode_write_frame(stream_index, 1);
 }
 
-int transcoding(const char* input, const char* output)
+int transcoding(const char* input, const char* output, int64_t bit_rate)
 {
     int ret;
     AVPacket *packet = NULL;
@@ -529,7 +529,7 @@ int transcoding(const char* input, const char* output)
 
     if ((ret = open_input_file(input)) < 0)
         goto end;
-    if ((ret = open_output_file(output)) < 0)
+    if ((ret = open_output_file(output, bit_rate)) < 0)
         goto end;
     if ((ret = init_filters()) < 0)
         goto end;

@@ -147,7 +147,8 @@ static int open_input_file(const char *filename,
 static int open_output_file(const char *filename,
                             AVCodecContext *input_codec_context,
                             AVFormatContext **output_format_context,
-                            AVCodecContext **output_codec_context)
+                            AVCodecContext **output_codec_context,
+                            int64_t bit_rate)
 {
     AVCodecContext *avctx          = NULL;
     AVIOContext *output_io_context = NULL;
@@ -211,7 +212,7 @@ static int open_output_file(const char *filename,
     avctx->channel_layout = av_get_default_channel_layout(OUTPUT_CHANNELS);
     avctx->sample_rate    = input_codec_context->sample_rate;
     avctx->sample_fmt     = output_codec->sample_fmts[0];
-    avctx->bit_rate       = OUTPUT_BIT_RATE;
+    avctx->bit_rate       = bit_rate;
 
     /* Allow the use of the experimental AAC encoder. */
     avctx->strict_std_compliance = FF_COMPLIANCE_EXPERIMENTAL;
@@ -792,7 +793,7 @@ static int write_output_file_trailer(AVFormatContext *output_format_context)
     return 0;
 }
 
-int transcode_aac(const char* input, const char* output)
+int transcode_aac(const char* input, const char* output, int64_t bit_rate)
 {
     AVFormatContext *input_format_context = NULL, *output_format_context = NULL;
     AVCodecContext *input_codec_context = NULL, *output_codec_context = NULL;
@@ -806,7 +807,7 @@ int transcode_aac(const char* input, const char* output)
         goto cleanup;
     /* Open the output file for writing. */
     if (open_output_file(output, input_codec_context,
-                         &output_format_context, &output_codec_context))
+                         &output_format_context, &output_codec_context, bit_rate))
         goto cleanup;
     /* Initialize the resampler to be able to convert audio sample formats. */
     if (init_resampler(input_codec_context, output_codec_context,
