@@ -3,6 +3,7 @@
 localprefix="$(pwd)/.local"
 
 cd ./deps/lame
+chmod +x ./configure
 emconfigure ./configure --enable-shared=no --enable-nasm=no --prefix="$localprefix"
 emmake make
 emmake make install
